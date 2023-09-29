@@ -1,0 +1,1 @@
+Zmieniam metode aktywacji z PROD na MIN

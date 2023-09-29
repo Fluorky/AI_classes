@@ -1,0 +1,55 @@
+FUNCTION_BLOCK ryzyko
+
+VAR_INPUT
+    dirtness_of_clothes : REAL;
+	type_of_dirt: REAL;
+END_VAR
+
+VAR_OUTPUT
+    wash_time : REAL;
+END_VAR
+
+FUZZIFY dirtness_of_clothes
+	TERM Small := (0, 1) (50, 0);
+    TERM Medium := (0,0) (50,1) (100, 0);
+	TERM Large := (50, 0) (100, 1);
+END_FUZZIFY
+
+FUZZIFY type_of_dirt
+    TERM NotGreasy := (0, 1) (50, 0);
+    TERM Medium := (0,0) (50,1) (100, 0);
+	TERM Greasy := (50, 0) (100, 1);
+END_FUZZIFY
+
+DEFUZZIFY  wash_time
+    TERM VeryShort:= (0,0)(7, 1) (12,0) ; 
+    TERM Short := (7, 0) (12, 1) (18,0);
+	TERM Medium := (12, 0) (20, 1) (40,0);
+	TERM Long := (20, 0) (40, 1) (60,0);
+	TERM VeryLong := (40, 0) (60, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+
+ RULE 1 : IF dirtness_of_clothes IS Large AND type_of_dirt IS Greasy THEN wash_time IS VeryLong;
+ RULE 2 : IF dirtness_of_clothes IS Medium AND type_of_dirt IS Greasy THEN wash_time IS Long;
+ RULE 3 : IF dirtness_of_clothes IS Small AND type_of_dirt IS Greasy THEN wash_time IS Long;
+ RULE 4 : IF dirtness_of_clothes IS Large AND type_of_dirt IS Medium THEN wash_time IS Long;
+ RULE 5 : IF dirtness_of_clothes IS Medium AND type_of_dirt IS Medium THEN wash_time IS Medium;
+ RULE 6 : IF dirtness_of_clothes IS Small AND type_of_dirt IS Medium THEN wash_time IS Medium;
+ RULE 7 : IF dirtness_of_clothes IS Large AND type_of_dirt IS NotGreasy THEN wash_time IS Medium;
+ RULE 8 : IF dirtness_of_clothes IS Medium AND type_of_dirt IS NotGreasy THEN wash_time IS Short;
+ RULE 9 : IF dirtness_of_clothes IS Small AND type_of_dirt IS NotGreasy THEN wash_time IS VeryShort;
+
+ 
+
+               
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

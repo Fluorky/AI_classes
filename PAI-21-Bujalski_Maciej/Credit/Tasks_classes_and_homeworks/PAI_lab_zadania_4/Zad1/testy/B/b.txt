@@ -1,0 +1,1 @@
+Jest zastosowana metoda PROD

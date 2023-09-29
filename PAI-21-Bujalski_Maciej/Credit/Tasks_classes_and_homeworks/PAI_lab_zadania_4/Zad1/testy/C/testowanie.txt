@@ -1,0 +1,7 @@
+calc car1_old 0
+calc car1_old 100
+calc car1_old 200
+calc car1_old 250
+calc car1_old 600
+calc car1_old 700
+calc car1_old 1000

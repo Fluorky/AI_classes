@@ -1,0 +1,51 @@
+FUNCTION_BLOCK ryzyko
+
+VAR_INPUT
+    widoczonosc : REAL;
+	predkosc: REAL;
+END_VAR
+
+VAR_OUTPUT
+    ryz : REAL;
+END_VAR
+
+FUZZIFY widoczonosc
+	TERM bardzo_slaba := (50, 1) (1000, 0);
+    TERM srednia := (300,0) (2000,1) (3000, 0);
+	TERM dobra := (2500, 0) (4000, 1);
+END_FUZZIFY
+
+FUZZIFY predkosc
+    TERM mala:= (10, 1) (70, 0);
+    TERM sredniaa := (50,0) (100,1) (170, 0);
+	TERM duza := (130, 0) (200, 1);
+END_FUZZIFY
+
+DEFUZZIFY  ryz
+    TERM bmale:= (0, 1) (25,0) ; 
+    TERM male := (10, 0) (35, 1) (60,0);
+	TERM srednie := (35, 0) (60, 1) (85,0);
+	TERM duze := (75, 0) (100, 1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+    RULE 1 : IF widoczonosc IS bardzo_slaba AND predkosc IS duza THEN ryz IS duze;
+    RULE 2 : IF widoczonosc IS bardzo_slaba AND predkosc IS sredniaa THEN ryz IS srednie;  
+    RULE 3 : IF widoczonosc IS srednia AND predkosc IS duza THEN ryz IS srednie;
+    RULE 4 : IF widoczonosc IS srednia AND predkosc IS sredniaa THEN ryz IS srednie;	
+    RULE 5 : IF widoczonosc IS srednia AND predkosc IS mala THEN ryz IS male;	
+	RULE 6 : IF widoczonosc IS bardzo_slaba AND predkosc IS mala THEN ryz IS srednie;	
+	RULE 7 : IF widoczonosc IS dobra AND predkosc IS duza THEN ryz IS srednie;
+    RULE 8 : IF widoczonosc IS dobra AND predkosc IS sredniaa THEN ryz IS male;  
+	RULE 9 : IF widoczonosc IS dobra AND predkosc IS mala THEN ryz IS bmale;
+
+               
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

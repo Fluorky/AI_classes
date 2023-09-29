@@ -1,0 +1,60 @@
+FUNCTION_BLOCK ryzyko
+
+VAR_INPUT
+    temperature : REAL;
+	wetness: REAL;
+END_VAR
+
+VAR_OUTPUT
+    command : REAL;
+END_VAR
+
+FUZZIFY temperature
+	TERM too_cold:= (5, 1) (10,0) ; 
+    TERM cold := (5, 0) (10, 1) (15,0);
+	TERM warm := (10, 0) (15, 1) (20,0);
+	TERM hot := (15, 0) (20, 1) (25,0);
+	TERM too_hot := (20, 0) (25, 1);
+END_FUZZIFY
+
+FUZZIFY wetness
+
+    TERM small := (0, 1)  (40,0);
+	TERM normal := (15, 0) (50, 1) (85,0);
+	TERM big := (60, 0)  (100,1);
+
+END_FUZZIFY
+
+DEFUZZIFY  command   
+    TERM stop := (0, 1)  (40,0);
+    TERM normal := (15, 0) (50, 1) (85,0);
+	TERM fast := (60, 0)  (100,1);
+    METHOD : COG;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+ RULE 1 : IF temperature IS too_cold AND wetness IS small THEN command IS stop;
+ RULE 2 : IF temperature IS too_cold  AND wetness IS normal THEN command IS stop;
+ RULE 3 : IF temperature IS too_cold  AND wetness IS big THEN command IS stop;
+ RULE 4 : IF temperature IS cold  AND wetness IS small THEN command IS normal;
+ RULE 5 : IF temperature IS cold  AND wetness IS normal THEN command IS stop;
+ RULE 6 : IF temperature IS cold  AND wetness IS big THEN command IS stop;
+ RULE 7 : IF temperature IS warm  AND wetness IS small THEN command IS normal;
+ RULE 8 : IF temperature IS warm  AND wetness IS normal THEN command IS normal;
+ RULE 9 : IF temperature IS warm  AND wetness IS big THEN command IS stop;
+ RULE 10 : IF temperature IS hot  AND wetness IS small THEN command IS fast;
+ RULE 11 : IF temperature IS hot  AND wetness IS normal THEN command IS normal;
+ RULE 12 : IF temperature IS hot AND wetness IS big THEN command IS normal;
+ RULE 13 : IF temperature IS too_hot AND wetness IS small THEN command IS fast;
+ RULE 14 : IF temperature IS too_hot AND wetness IS normal THEN command IS fast;
+ RULE 15 : IF temperature IS too_hot AND wetness IS big THEN command IS normal;
+ 
+               
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

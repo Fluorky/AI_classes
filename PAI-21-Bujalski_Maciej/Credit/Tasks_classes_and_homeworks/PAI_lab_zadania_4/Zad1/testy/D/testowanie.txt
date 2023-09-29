@@ -1,0 +1,7 @@
+calc car1 0
+calc car1 100
+calc car1 200
+calc car1 250
+calc car1 600
+calc car1 700
+calc car1 1000

@@ -1,0 +1,19 @@
+show car1
+
+calc car1 120
+
+
+
+show car1
+
+calc car1 130
+
+
+zmieniam linijke 27
+ COG -> LM, 
+ LM -> RM,
+ RM -> COG
+
+
+
+tocppp car1
